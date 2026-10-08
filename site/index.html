@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新的人生 · ជីវិតថ្មី — Chinese–Khmer Flashcards</title>
+<meta name="description" content="Flashcards for learning 10 Chinese words with pinyin and Khmer meanings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;900&family=Kantumruy+Pro:wght@400;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ecdf;
+    --paper-2: #ebe0cd;
+    --ink: #1d1a17;
+    --ink-soft: #5b5248;
+    --seal: #b8321f;
+    --seal-dark: #8e2414;
+    --jade: #2f6b57;
+    --line: rgba(29, 26, 23, .14);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(circle at 12% 8%, rgba(184,50,31,.08), transparent 38%),
+      radial-gradient(circle at 92% 90%, rgba(47,107,87,.09), transparent 40%),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Kantumruy Pro", system-ui, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .zh { font-family: "Noto Serif SC", serif; }
+  .py { font-family: "Fraunces", Georgia, serif; font-style: italic; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* Header */
+  header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .portrait {
+    position: relative;
+    width: 116px; height: 116px;
+  }
+  .portrait img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--paper);
+    box-shadow: 0 0 0 2px var(--seal), 0 10px 24px rgba(0,0,0,.18);
+  }
+  .portrait .stamp {
+    position: absolute; right: -8px; bottom: -4px;
+    width: 42px; height: 42px;
+    background: var(--seal); color: #fff4e8;
+    display: grid; place-items: center;
+    border-radius: 8px; transform: rotate(-8deg);
+    font-family: "Noto Serif SC", serif; font-weight: 900; font-size: 20px;
+    box-shadow: 0 4px 10px rgba(142,36,20,.35);
+  }
+  h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.1; font-weight: 900; }
+  h1 .km { display: block; font-family: "Kantumruy Pro"; font-weight: 700; font-size: .55em; color: var(--seal); margin-top: 8px; }
+  .lede { margin: 10px 0 0; color: var(--ink-soft); }
+
+  /* Tabs */
+  nav.tabs { display: flex; gap: 8px; margin: 28px 0 22px; flex-wrap: wrap; }
+  .tab {
+    border: 1px solid var(--line); background: transparent; color: var(--ink);
+    padding: 10px 18px; border-radius: 999px; cursor: pointer;
+    font: inherit; font-weight: 600;
+  }
+  .tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tab:focus-visible, .btn:focus-visible, .card:focus-visible, .opt:focus-visible { outline: 3px solid var(--seal); outline-offset: 3px; }
+  section[hidden] { display: none; }
+
+  /* Toolbar */
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .progress { font-weight: 600; color: var(--ink-soft); }
+  .progress b { color: var(--ink); }
+  .bar { height: 6px; background: var(--paper-2); border-radius: 99px; overflow: hidden; margin-bottom: 20px; }
+  .bar > span { display: block; height: 100%; background: var(--seal); transition: width .35s ease; }
+  .group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font: inherit; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    padding: 10px 16px; border-radius: 12px;
+    transition: transform .12s ease, background .2s;
+  }
+  .btn:hover { background: rgba(29,26,23,.06); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--seal); border-color: var(--seal); color: #fff7ee; }
+  .btn.primary:hover { background: var(--seal-dark); }
+  .btn.jade { background: var(--jade); border-color: var(--jade); color: #f2fbf6; }
+  .btn.small { padding: 7px 12px; font-size: 14px; }
+
+  /* Flashcard */
+  .stage { perspective: 1400px; }
+  .card {
+    position: relative; width: 100%; min-height: 360px;
+    cursor: pointer; border: 0; background: none; padding: 0; color: inherit; font: inherit;
+    transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.8,.2,1);
+    display: block;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px; text-align: center;
+    background: #fffaf2;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 40px -18px rgba(60,40,20,.35);
+  }
+  .face::before {
+    content: ""; position: absolute; inset: 12px;
+    border: 1px dashed rgba(184,50,31,.25); border-radius: 12px; pointer-events: none;
+  }
+  .face.back { transform: rotateY(180deg); background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .face.back::before { border-color: rgba(244,236,223,.2); }
+  .num { position: absolute; top: 24px; left: 28px; font-family: "Fraunces"; font-size: 14px; color: var(--ink-soft); letter-spacing: .08em; }
+  .face.back .num { color: rgba(244,236,223,.6); }
+  .hint { position: absolute; bottom: 22px; font-size: 13px; color: var(--ink-soft); }
+  .face.back .hint { color: rgba(244,236,223,.55); }
+  .big-zh { font-size: clamp(64px, 14vw, 120px); font-weight: 900; line-height: 1.1; letter-spacing: .04em; }
+  .big-km { font-size: clamp(32px, 7vw, 54px); font-weight: 700; line-height: 1.35; }
+  .mid-py { font-size: clamp(24px, 4vw, 34px); color: var(--seal); margin-top: 8px; }
+  .face.back .mid-py { color: #f0a48f; }
+  .back .big-km { color: #fff4e8; }
+  .back .zh-small { font-size: 28px; margin-top: 8px; opacity: .85; }
+  .speak {
+    position: absolute; top: 18px; right: 20px;
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer;
+    display: grid; place-items: center; z-index: 2;
+  }
+  .speak svg { width: 20px; height: 20px; }
+  .known-badge {
+    position: absolute; top: 22px; left: 50%; transform: translateX(-50%) rotate(-6deg);
+    border: 2px solid var(--jade); color: var(--jade); font-weight: 700; font-size: 13px;
+    padding: 2px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .face.back .known-badge { border-color: #8fd3b6; color: #8fd3b6; }
+
+  .controls { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin-top: 20px; }
+  .controls .mid { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+
+  /* Quiz */
+  .quiz-card {
+    background: #fffaf2; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 32px; box-shadow: 0 18px 40px -22px rgba(60,40,20,.35);
+  }
+  .q-prompt { text-align: center; margin-bottom: 24px; }
+  .q-label { font-size: 14px; color: var(--ink-soft); }
+  .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .opt {
+    font: inherit; text-align: left; cursor: pointer;
+    padding: 16px 18px; border-radius: 14px;
+    border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+    font-size: 20px; font-weight: 600; transition: border-color .2s, background .2s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--ink); }
+  .opt.correct { background: #dff0e7; border-color: var(--jade); color: #154335; }
+  .opt.wrong { background: #f7dcd5; border-color: var(--seal); color: var(--seal-dark); }
+  .opt:disabled { cursor: default; }
+  .opt small { display: block; font-size: 14px; font-weight: 400; color: var(--ink-soft); }
+  .feedback { min-height: 28px; text-align: center; margin: 18px 0 4px; font-weight: 600; }
+  .result { text-align: center; padding: 20px 0; }
+  .score { font-family: "Fraunces"; font-size: 72px; line-height: 1; color: var(--seal); }
+
+  /* List */
+  .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .row {
+    display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center;
+    background: #fffaf2; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+  }
+  .row .n { font-family: "Fraunces"; color: var(--seal); font-size: 20px; }
+  .row .zh { font-size: 24px; font-weight: 900; line-height: 1.2; }
+  .row .py { color: var(--ink-soft); font-size: 15px; }
+  .row .km { font-weight: 600; }
+  .row .speak { position: static; width: 38px; height: 38px; color: var(--ink); }
+
+  footer { margin-top: 48px; color: var(--ink-soft); font-size: 14px; text-align: center; }
+
+  @media (max-width: 600px) {
+    header { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+    .options { grid-template-columns: 1fr; }
+    .controls { grid-template-columns: 1fr 1fr; }
+    .controls .mid { grid-column: 1 / -1; order: -1; }
+    .card { min-height: 320px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="portrait">
+      <img src="/images/learner.jpg" alt="Photo of the learner" width="116" height="116">
+      <div class="stamp" aria-hidden="true">学</div>
+    </div>
+    <div>
+      <h1><span class="zh">新的人生</span><span class="km">ជីវិតថ្មី · រៀនភាសាចិន ១០ ពាក្យ</span></h1>
+      <p class="lede">Learn 10 Chinese words with pinyin and Khmer meanings. Tap a card to flip it. · ចុចលើកាតដើម្បីបង្វិល</p>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="cards">🃏 កាត · 卡片</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="quiz">✍️ តេស្ត · 测验</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="list">📋 បញ្ជីពាក្យ · 词表</button>
+  </nav>
+
+  <!-- Flashcards -->
+  <section id="cards" role="tabpanel">
+    <div class="toolbar">
+      <div class="progress">កាត <b id="pos">1</b> / 10 · ចេះហើយ <b id="knownCount">0</b> / 10</div>
+      <div class="group">
+        <button class="btn small" id="dirBtn" title="Switch which side is shown first">中 → ខ្មែរ</button>
+        <button class="btn small" id="shuffleBtn">🔀 ច្របល់</button>
+        <button class="btn small" id="resetBtn">↺ ចាប់ផ្តើមឡើងវិញ</button>
+      </div>
+    </div>
+    <div class="bar"><span id="bar" style="width:0%"></span></div>
+
+    <div class="stage">
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Flip card">
+        <div class="face front" id="front"></div>
+        <div class="face back" id="back"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prevBtn" aria-label="Previous card">← មុន</button>
+      <div class="mid">
+        <button class="btn" id="againBtn">🔁 មិនទាន់ចេះ</button>
+        <button class="btn jade" id="knowBtn">✓ ចេះហើយ</button>
+      </div>
+      <button class="btn primary" id="nextBtn" aria-label="Next card">បន្ទាប់ →</button>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section id="quiz" role="tabpanel" hidden>
+    <div class="toolbar">
+      <div class="progress">សំណួរ <b id="qPos">1</b> / 10 · ពិន្ទុ <b id="qScore">0</b></div>
+      <div class="group">
+        <button class="btn small" id="qModeBtn">中 → ខ្មែរ</button>
+        <button class="btn small" id="qRestart">↺ ថ្មី</button>
+      </div>
+    </div>
+    <div class="bar"><span id="qBar" style="width:0%"></span></div>
+    <div class="quiz-card" id="quizBody"></div>
+  </section>
+
+  <!-- List -->
+  <section id="list" role="tabpanel" hidden>
+    <div class="list" id="wordList"></div>
+  </section>
+
+  <footer>改变自己，开始新的人生。 · ផ្លាស់ប្តូរខ្លួនឯង ចាប់ផ្តើមជីវិតថ្មី។</footer>
+</div>
+
+<script>
+const WORDS = [
+  { zh: "改变自己", py: "gǎibiàn zìjǐ",  km: "ផ្លាស់ប្តូរខ្លួនឯង" },
+  { zh: "新的人生", py: "xīn de rénshēng", km: "ជីវិតថ្មី មនុស្សថ្មី" },
+  { zh: "无聊",     py: "wúliáo",        km: "អផ្សុក" },
+  { zh: "学习技能", py: "xuéxí jìnéng",   km: "រៀនជំនាញ" },
+  { zh: "失望",     py: "shīwàng",       km: "ខកចិត្ត" },
+  { zh: "做饭",     py: "zuò fàn",       km: "ធ្វើម្ហូប" },
+  { zh: "不快乐",   py: "bú kuàilè",     km: "គ្មានក្តីសុខ" },
+  { zh: "早起",     py: "zǎoqǐ",         km: "ក្រោកពីព្រលឹម" },
+  { zh: "跑步",     py: "pǎobù",         km: "រត់ហាត់ប្រាណ" },
+  { zh: "沮丧",     py: "jǔsàng",        km: "បាក់ទឹកចិត្ត" },
+];
+
+const SPEAKER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
+const $ = (id) => document.getElementById(id);
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN"; u.rate = 0.8;
+  const v = speechSynthesis.getVoices().find(v => /zh[-_]CN/i.test(v.lang));
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+  document.querySelectorAll("section[role=tabpanel]").forEach(s => s.hidden = s.id !== t.dataset.tab);
+}));
+
+/* ---------- Flashcards ---------- */
+const STORE = "zh-km-known-v1";
+let known = new Set(JSON.parse(localStorage.getItem(STORE) || "[]"));
+let order = WORDS.map((_, i) => i);
+let pos = 0;
+let zhFirst = true;
+const card = $("card");
+
+function saveKnown() { localStorage.setItem(STORE, JSON.stringify([...known])); }
+
+function zhFace(w, i) {
+  return `<span class="num">No. ${String(i + 1).padStart(2, "0")}</span>
+    <div class="big-zh zh">${w.zh}</div>
+    <div class="mid-py py">${w.py}</div>`;
+}
+function kmFace(w, i) {
+  return `<span class="num">No. ${String(i + 1).padStart(2, "0")}</span>
+    <div class="big-km">${w.km}</div>`;
+}
+function answerFace(w, i) {
+  return zhFirst
+    ? `<span class="num">No. ${String(i + 1).padStart(2, "0")}</span><div class="big-km">${w.km}</div><div class="zh-small zh">${w.zh}</div><div class="mid-py py">${w.py}</div>`
+    : `<span class="num">No. ${String(i + 1).padStart(2, "0")}</span><div class="big-zh zh">${w.zh}</div><div class="mid-py py">${w.py}</div><div style="margin-top:10px;opacity:.8">${w.km}</div>`;
+}
+
+function renderCard() {
+  const i = order[pos], w = WORDS[i];
+  const badge = known.has(i) ? '<span class="known-badge">✓ ចេះហើយ</span>' : "";
+  const spk = `<button class="speak" data-say="${w.zh}" aria-label="Play pronunciation">${SPEAKER}</button>`;
+  $("front").innerHTML = (zhFirst ? zhFace(w, i) : kmFace(w, i)) + badge + (zhFirst ? spk : "") + '<span class="hint">ចុចដើម្បីមើលចម្លើយ · tap to flip</span>';
+  $("back").innerHTML = answerFace(w, i) + badge + spk + '<span class="hint">ចុចដើម្បីបង្វិលត្រឡប់</span>';
+  $("pos").textContent = pos + 1;
+  $("knownCount").textContent = known.size;
+  $("bar").style.width = (known.size / WORDS.length * 100) + "%";
+}
+
+function go(delta) {
+  const wasFlipped = card.classList.contains("flipped");
+  card.classList.remove("flipped");
+  pos = (pos + delta + order.length) % order.length;
+  setTimeout(renderCard, wasFlipped ? 250 : 0);
+}
+
+card.addEventListener("click", (e) => {
+  const s = e.target.closest(".speak");
+  if (s) { e.stopPropagation(); speak(s.dataset.say); return; }
+  card.classList.toggle("flipped");
+});
+card.addEventListener("keydown", (e) => {
+  if (e.key === " " || e.key === "Enter") { e.preventDefault(); card.classList.toggle("flipped"); }
+});
+document.addEventListener("keydown", (e) => {
+  if ($("cards").hidden) return;
+  if (e.key === "ArrowRight") go(1);
+  if (e.key === "ArrowLeft") go(-1);
+});
+$("nextBtn").onclick = () => go(1);
+$("prevBtn").onclick = () => go(-1);
+$("knowBtn").onclick = () => { known.add(order[pos]); saveKnown(); go(1); };
+$("againBtn").onclick = () => { known.delete(order[pos]); saveKnown(); go(1); };
+$("shuffleBtn").onclick = () => { order = shuffle(order); pos = 0; card.classList.remove("flipped"); renderCard(); };
+$("resetBtn").onclick = () => { known.clear(); saveKnown(); order = WORDS.map((_, i) => i); pos = 0; card.classList.remove("flipped"); renderCard(); };
+$("dirBtn").onclick = () => {
+  zhFirst = !zhFirst;
+  $("dirBtn").textContent = zhFirst ? "中 → ខ្មែរ" : "ខ្មែរ → 中";
+  card.classList.remove("flipped"); renderCard();
+};
+
+/* ---------- Quiz ---------- */
+let qOrder, qPos, qScore, qZhPrompt = true;
+
+function startQuiz() {
+  qOrder = shuffle(WORDS.map((_, i) => i)); qPos = 0; qScore = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  $("qPos").textContent = Math.min(qPos + 1, WORDS.length);
+  $("qScore").textContent = qScore;
+  $("qBar").style.width = (qPos / WORDS.length * 100) + "%";
+  const body = $("quizBody");
+
+  if (qPos >= WORDS.length) {
+    const msg = qScore === 10 ? "加油！ពូកែណាស់! 🎉" : qScore >= 7 ? "很好！ល្អណាស់!" : "再试一次！ព្យាយាមម្តងទៀត!";
+    body.innerHTML = `<div class="result">
+      <div class="score">${qScore}/10</div>
+      <p style="font-size:22px;font-weight:700;margin:14px 0 22px">${msg}</p>
+      <button class="btn primary" id="again">↺ ធ្វើតេស្តម្តងទៀត</button></div>`;
+    $("again").onclick = startQuiz;
+    return;
+  }
+
+  const i = qOrder[qPos], w = WORDS[i];
+  const choices = shuffle([i, ...shuffle(WORDS.map((_, k) => k).filter(k => k !== i)).slice(0, 3)]);
+  const prompt = qZhPrompt
+    ? `<div class="q-label">តើពាក្យនេះមានន័យថាអ្វី?</div><div class="big-zh zh" style="font-size:clamp(52px,11vw,88px)">${w.zh}</div><div class="mid-py py">${w.py}</div>`
+    : `<div class="q-label">តើភាសាចិនហៅថាអ្វី?</div><div class="big-km">${w.km}</div>`;
+  body.innerHTML = `<div class="q-prompt">${prompt}</div>
+    <div class="options">${choices.map(c => {
+      const o = WORDS[c];
+      const label = qZhPrompt ? o.km : `<span class="zh">${o.zh}</span><small class="py">${o.py}</small>`;
+      return `<button class="opt" data-i="${c}">${label}</button>`;
+    }).join("")}</div>
+    <div class="feedback" id="fb"></div>
+    <div style="text-align:center"><button class="btn primary" id="qNext" hidden>បន្ទាប់ →</button></div>`;
+
+  body.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    const ok = +b.dataset.i === i;
+    if (ok) qScore++;
+    body.querySelectorAll(".opt").forEach(x => {
+      x.disabled = true;
+      if (+x.dataset.i === i) x.classList.add("correct");
+    });
+    if (!ok) b.classList.add("wrong");
+    $("fb").innerHTML = ok ? "✓ ត្រឹមត្រូវ! 对！" : `✗ ចម្លើយត្រឹមត្រូវ៖ <span class="zh">${w.zh}</span> (${w.py}) = ${w.km}`;
+    $("fb").style.color = ok ? "var(--jade)" : "var(--seal)";
+    $("qScore").textContent = qScore;
+    speak(w.zh);
+    const n = $("qNext"); n.hidden = false; n.focus();
+    n.onclick = () => { qPos++; renderQuestion(); };
+  });
+}
+
+$("qRestart").onclick = startQuiz;
+$("qModeBtn").onclick = () => {
+  qZhPrompt = !qZhPrompt;
+  $("qModeBtn").textContent = qZhPrompt ? "中 → ខ្មែរ" : "ខ្មែរ → 中";
+  startQuiz();
+};
+
+/* ---------- List ---------- */
+$("wordList").innerHTML = WORDS.map((w, i) => `
+  <div class="row">
+    <span class="n">${i + 1}</span>
+    <div><div class="zh">${w.zh}</div><div class="py">${w.py}</div><div class="km">${w.km}</div></div>
+    <button class="speak" data-say="${w.zh}" aria-label="Play pronunciation of ${w.zh}">${SPEAKER}</button>
+  </div>`).join("");
+$("wordList").addEventListener("click", (e) => {
+  const s = e.target.closest(".speak"); if (s) speak(s.dataset.say);
+});
+
+if ("speechSynthesis" in window) speechSynthesis.getVoices();
+renderCard();
+startQuiz();
+</script>
+</body>
+</html>
